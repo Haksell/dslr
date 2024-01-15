@@ -15,13 +15,10 @@ def standardize_columns(data, columns):
     return pd.DataFrame(MinMaxScaler().fit_transform(data[columns]), columns=columns)
 
 
-# TODO: house colors
-# TODO: same bins
-
 _, WIDTH = DIMENSIONS = (3, 5)
-BINS = 12
+BINS = 16
 TITLE = "Histograms of Class Grades by Hogwarts House"
-# COLORS = {
+# HOUSE_COLORS = {
 #     "Gryffindor": "#AE0001",
 #     "Hufflepuff": "#F0C75E",
 #     "Ravenclaw": "#222F5B",
@@ -31,17 +28,18 @@ TITLE = "Histograms of Class Grades by Hogwarts House"
 data = parse_args("Show histograms of class grades by Hogwarts house.")
 standardized_data = standardize_columns(data, get_numeric_columns(data).columns)
 data["Average"] = standardized_data.mean(axis=1)
-
-
 grouped_data = data.groupby("Hogwarts House")
 fig = plt.figure(figsize=(20, 10))
 for i, col in enumerate(get_numeric_columns(data)):
     if i == 13:
         i = 14
     ax = plt.subplot2grid(DIMENSIONS, divmod(i, WIDTH))
-    grouped_data[col].plot(kind="hist", alpha=0.5, bins=BINS, ax=ax)
+    min_val = data[col].min()
+    max_val = data[col].max()
+    bins = np.linspace(min_val, max_val, BINS)
+    for name, group in grouped_data:
+        ax.hist(group[col], bins=bins, alpha=0.5, label=name)
     ax.set_xlabel(col)
-    ax.set_ylabel("")
     if i == 0:
         fig.legend(loc="lower right", bbox_to_anchor=(0.74, 0.14))
 fig.suptitle(TITLE, fontsize=14)
