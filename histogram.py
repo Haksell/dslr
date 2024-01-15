@@ -18,12 +18,12 @@ def standardize_columns(data, columns):
 _, WIDTH = DIMENSIONS = (3, 5)
 BINS = 16
 TITLE = "Histograms of Class Grades by Hogwarts House"
-# HOUSE_COLORS = {
-#     "Gryffindor": "#AE0001",
-#     "Hufflepuff": "#F0C75E",
-#     "Ravenclaw": "#222F5B",
-#     "Slytherin": "#2A623D",
-# }
+HOUSE_COLORS = {
+    "Gryffindor": "#ae0001",
+    "Hufflepuff": "#f0c75e",
+    "Ravenclaw": "#222f5b",
+    "Slytherin": "#2a623d",
+}
 
 data = parse_args("Show histograms of class grades by Hogwarts house.")
 standardized_data = standardize_columns(data, get_numeric_columns(data).columns)
@@ -38,7 +38,7 @@ for i, col in enumerate(get_numeric_columns(data)):
     max_val = data[col].max()
     bins = np.linspace(min_val, max_val, BINS)
     for name, group in grouped_data:
-        ax.hist(group[col], bins=bins, alpha=0.5, label=name)
+        ax.hist(group[col], bins=bins, alpha=0.5, label=name, color=HOUSE_COLORS[name])
     ax.set_xlabel(col)
     if i == 0:
         fig.legend(loc="lower right", bbox_to_anchor=(0.74, 0.14))
