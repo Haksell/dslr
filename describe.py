@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
 from math import ceil, floor, isnan, nan, sqrt
-import numpy as np
-
 from parse_args import parse_args
 
 
@@ -86,7 +84,7 @@ q2 = ["50%"]
 q3 = ["75%"]
 maxs = ["max"]
 
-for column, series in data.select_dtypes(include=[np.float64]).items():
+for column, series in data.select_dtypes(include=[float]).items():
     columns.append(column)
     values = [x for x in series if not isnan(x)]
     counts.append(format_float(len(values)))

@@ -8,7 +8,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 
 def get_numeric_columns(data):
-    return data.select_dtypes(include=[np.float64])
+    return data.select_dtypes(include=[float])
 
 
 def standardize_columns(data, columns):
