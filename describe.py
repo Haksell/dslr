@@ -6,15 +6,22 @@ import numpy as np
 from parse_args import parse_args
 
 
+def ft_sum(arr):
+    res = 0
+    for x in arr:
+        res += x
+    return res
+
+
 def ft_mean(arr):
-    return sum(arr) / len(arr) if arr else nan
+    return ft_sum(arr) / len(arr) if arr else nan
 
 
 def ft_stdev(arr):
     if len(arr) <= 1:
         return nan
     m = ft_mean(arr)
-    return sqrt(sum((x - m) ** 2 for x in arr) / (len(arr) - 1))
+    return sqrt(ft_sum((x - m) ** 2 for x in arr) / (len(arr) - 1))
 
 
 def ft_min(arr):
