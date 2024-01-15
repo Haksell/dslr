@@ -31,7 +31,7 @@ for i, (col, series) in enumerate(get_numeric_columns(data).items()):
     ax.set_ylabel("")
     if i == 0:
         fig.legend(loc="lower right", bbox_to_anchor=(0.95, 0.15))
-fig.suptitle(TITLE, fontsize=16)
+fig.suptitle(TITLE, fontsize=14)
 fig.canvas.manager.set_window_title(TITLE)
 plt.tight_layout()
 plt.show()
