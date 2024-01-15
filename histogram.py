@@ -34,7 +34,7 @@ def normalize_columns(data, columns):
 
 _, WIDTH = DIMENSIONS = (3, 5)
 BINS = 12
-TITLE = "Histograms of Numeric Data by Hogwarts House"
+TITLE = "Histograms of Class Grades by Hogwarts House"
 
 data = parse_args()
 grouped_data = data.groupby("Hogwarts House")
