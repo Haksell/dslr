@@ -23,14 +23,22 @@ def parse_args():
         sys.exit(1)
 
 
-data = parse_args()
+WIDTH = 5
+HEIGHT = 3
 
-for col, series in data.select_dtypes(include=[np.float64]).items():
-    print(col)
-    plt.figure(figsize=(10, 6))
-    data.groupby("Hogwarts House")[col].plot(kind="hist", alpha=0.5, bins=10)
-    plt.title(col)
-    plt.xlabel(f"{col} score")
-    plt.ylabel("Frequency")
-    plt.legend()
-    plt.show()
+data = parse_args()
+grouped_data = data.groupby("Hogwarts House")
+numeric_columns = data.select_dtypes(include=[np.float64])
+for i, (col, series) in enumerate(numeric_columns.items()):
+    ax = plt.subplot2grid((HEIGHT, WIDTH), divmod(i, WIDTH))
+    grouped_data[col].plot(kind="hist", alpha=0.5, bins=15, ax=ax)
+    ax.set_title(col)
+    ax.set_xlabel(f"{col} score")
+    ax.set_ylabel("Frequency")
+    ax.legend()
+
+
+plt.tight_layout()
+manager = plt.get_current_fig_manager()
+manager.window.showMaximized()
+plt.show()
