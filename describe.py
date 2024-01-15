@@ -19,7 +19,7 @@ def parse_args():
         print(f"Error: File {args.filename} not found.")
         sys.exit(1)
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"Error: {e}")
         sys.exit(1)
 
 
