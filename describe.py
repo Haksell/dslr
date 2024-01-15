@@ -1,26 +1,9 @@
 #!/usr/bin/env python
 
-import argparse
 from math import ceil, floor, isnan, nan, sqrt
 import numpy as np
-import pandas as pd
-import sys
 
-
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Describe numeric data of the given dataset."
-    )
-    parser.add_argument("filename", type=str, help="Filename of the CSV.")
-    args = parser.parse_args()
-    try:
-        return pd.read_csv(args.filename, index_col="Index")
-    except FileNotFoundError:
-        print(f"Error: File {args.filename} not found.")
-        sys.exit(1)
-    except Exception as e:
-        print(f"Error: {e}")
-        sys.exit(1)
+from parse_args import parse_args
 
 
 def ft_mean(arr):
@@ -83,7 +66,7 @@ def format_float(x):
     return "NaN" if isnan(x) else f"{x:.6f}"
 
 
-data = parse_args()
+data = parse_args("Describe numeric data of the given dataset.")
 # print(data.describe(), end="\n\n")
 
 columns = [""]

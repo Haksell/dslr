@@ -1,27 +1,10 @@
 #!/usr/bin/env python
 
-import argparse
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
+from parse_args import parse_args
 from sklearn.preprocessing import StandardScaler
-import sys
-
-
-def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Describe numeric data of the given dataset."
-    )
-    parser.add_argument("filename", type=str, help="Filename of the CSV.")
-    args = parser.parse_args()
-    try:
-        return pd.read_csv(args.filename, index_col="Index")
-    except FileNotFoundError:
-        print(f"Error: File {args.filename} not found.")
-        sys.exit(1)
-    except Exception as e:
-        print(f"Error: {e}")
-        sys.exit(1)
 
 
 def get_numeric_columns(data):
@@ -36,7 +19,7 @@ _, WIDTH = DIMENSIONS = (3, 5)
 BINS = 12
 TITLE = "Histograms of Class Grades by Hogwarts House"
 
-data = parse_args()
+data = parse_args("Show histograms of class grades by Hogwarts house.")
 grouped_data = data.groupby("Hogwarts House")
 normalized_data = normalize_columns(data, get_numeric_columns(data).columns)
 data["Average"] = normalized_data.mean(axis=1)
