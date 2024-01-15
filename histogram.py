@@ -15,22 +15,35 @@ def standardize_columns(data, columns):
     return pd.DataFrame(MinMaxScaler().fit_transform(data[columns]), columns=columns)
 
 
+# TODO: house colors
+# TODO: same bins
+
 _, WIDTH = DIMENSIONS = (3, 5)
 BINS = 12
 TITLE = "Histograms of Class Grades by Hogwarts House"
+# COLORS = {
+#     "Gryffindor": "#AE0001",
+#     "Hufflepuff": "#F0C75E",
+#     "Ravenclaw": "#222F5B",
+#     "Slytherin": "#2A623D",
+# }
 
 data = parse_args("Show histograms of class grades by Hogwarts house.")
 standardized_data = standardize_columns(data, get_numeric_columns(data).columns)
 data["Average"] = standardized_data.mean(axis=1)
+
+
 grouped_data = data.groupby("Hogwarts House")
 fig = plt.figure(figsize=(20, 10))
 for i, col in enumerate(get_numeric_columns(data)):
+    if i == 13:
+        i = 14
     ax = plt.subplot2grid(DIMENSIONS, divmod(i, WIDTH))
     grouped_data[col].plot(kind="hist", alpha=0.5, bins=BINS, ax=ax)
     ax.set_xlabel(col)
     ax.set_ylabel("")
     if i == 0:
-        fig.legend(loc="lower right", bbox_to_anchor=(0.95, 0.15))
+        fig.legend(loc="lower right", bbox_to_anchor=(0.74, 0.14))
 fig.suptitle(TITLE, fontsize=14)
 fig.canvas.manager.set_window_title(TITLE)
 plt.tight_layout()
