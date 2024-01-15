@@ -19,10 +19,10 @@ _, WIDTH = DIMENSIONS = (3, 5)
 BINS = 16
 TITLE = "Histograms of Class Grades by Hogwarts House"
 HOUSE_COLORS = {
-    "Gryffindor": "#ae0001",
-    "Hufflepuff": "#f0c75e",
-    "Ravenclaw": "#222f5b",
-    "Slytherin": "#2a623d",
+    "Gryffindor": "#D62728",
+    "Hufflepuff": "#FF7F0E",
+    "Ravenclaw": "#1F77B4",
+    "Slytherin": "#2CA02C",
 }
 
 data = parse_args("Show histograms of class grades by Hogwarts house.")
