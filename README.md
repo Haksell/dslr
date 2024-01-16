@@ -26,6 +26,8 @@
 
 ### Regression
 
+-   [ ] Use Birthday and Best Hand features
+-   [ ] Train using scikit-learn
 -   [ ] Stochastic Gradient Descent
 -   [ ] Mini-batch Gradient Descent
 -   [ ] Conjugate Gradient Descent
