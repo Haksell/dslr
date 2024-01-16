@@ -4,6 +4,16 @@ from math import ceil, floor, isnan, nan, sqrt
 from utils import parse_args
 
 
+def quicksort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quicksort(left) + middle + quicksort(right)
+
+
 def ft_sum(arr):
     res = 0
     for x in arr:
@@ -47,14 +57,14 @@ def ft_max(arr):
 
 
 def ft_percentile(arr, p):
-    # Assumes arr is already sorted
     assert 0 <= p <= 100
     if p == 0:
-        return min(arr)
+        return ft_min(arr)
     if p == 100:
-        return max(arr)
+        return ft_max(arr)
     if not arr:
         return nan
+    arr = quicksort(arr)
     idx = p / 100 * (len(arr) - 1)
     before = arr[floor(idx)]
     after = arr[ceil(idx)]
@@ -63,7 +73,6 @@ def ft_percentile(arr, p):
 
 
 def ft_median(arr):
-    # Assumes arr is already sorted
     return ft_percentile(arr, 50)
 
 
@@ -71,7 +80,15 @@ def ft_median_absolute_deviation(arr):
     if not arr:
         return nan
     median = ft_median(arr)
-    return ft_median(sorted([abs(x - median) for x in arr]))
+    return ft_median([abs(x - median) for x in arr])
+
+
+def ft_range(arr):
+    return ft_max(arr) - ft_min(arr)
+
+
+def ft_interquartile_range(arr):
+    return ft_percentile(arr, 75) - ft_percentile(arr, 25)
 
 
 def print_row(strings, widths):
@@ -95,6 +112,8 @@ pairs = [
     ("var", ft_var),
     ("std", ft_stdev),
     ("mad", ft_median_absolute_deviation),
+    ("range", ft_range),
+    ("iqr", ft_interquartile_range),
     ("min", ft_min),
     ("25%", lambda a: ft_percentile(a, 25)),
     ("50%", ft_median),
@@ -107,7 +126,7 @@ columns = [""]
 
 for column, series in data.select_dtypes(include=[float]).items():
     columns.append(column)
-    values = sorted(x for x in series if not isnan(x))
+    values = [x for x in series if not isnan(x)]
     for line, func in zip(lines, functions):
         line.append(format_float(func(values)))
 

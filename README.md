@@ -6,8 +6,8 @@
 -   [x] Variance
 -   [ ] Skewness
 -   [ ] Kurtosis
--   [ ] Range
--   [ ] Interquartile Range
+-   [x] Range
+-   [x] Interquartile Range
 
 ### Plots
 
