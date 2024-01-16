@@ -9,13 +9,9 @@ def simplify_string(s):
     return "".join(c.upper() for c in s if c.isalpha())
 
 
-def check_class_exists(c, u, upper_to_original):
+def check_class_exists(c, u, upper_to_original, errors):
     if u not in upper_to_original:
-        print(f'Class "{c}" not found')
-        print("Class must be one of:")
-        for _, original in sorted(upper_to_original.items()):
-            print(f"- {original}")
-        sys.exit(1)
+        errors.append(f'"{c}"')
 
 
 data, args = parse_args(
@@ -32,8 +28,17 @@ for column in data.columns:
         upper_column = simplify_string(column)
         upper_to_original[upper_column] = column
         data.rename(columns={column: upper_column}, inplace=True)
-check_class_exists(class1, upper1, upper_to_original)
-check_class_exists(class2, upper2, upper_to_original)
+
+errors = []
+check_class_exists(class1, upper1, upper_to_original, errors)
+check_class_exists(class2, upper2, upper_to_original, errors)
+if errors:
+    print(f'Class{"es" if len(errors)==2 else ""} {" and ".join(errors)} not found.')
+    print("Class must be one of:")
+    for _, original in sorted(upper_to_original.items()):
+        print(f"- {original}")
+    sys.exit(1)
+
 original1 = upper_to_original[upper1]
 original2 = upper_to_original[upper2]
 
