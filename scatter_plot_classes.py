@@ -17,7 +17,7 @@ plt.scatter(log_means, log_std_devs)
 plt.xlabel("Log Mean")
 plt.ylabel("Log Standard Deviation")
 plt.title(TITLE)
-plt.gcf().canvas.setWindowTitle(TITLE)
+plt.get_current_fig_manager().set_window_title(TITLE)
 for i, txt in enumerate(log_transformed_df.columns):
     plt.annotate(txt, (log_means.iloc[i], log_std_devs.iloc[i]))
 plt.show()
