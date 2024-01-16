@@ -10,16 +10,19 @@ HOUSE_COLORS = {
 }
 
 
-def parse_args(description, additional_arguments=None):
+def parse_args(description, *, additional_arguments=None, flags=None):
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument("filename", type=str, help="Filename of the CSV.")
     if additional_arguments:
         for arg in additional_arguments:
             parser.add_argument(arg, type=str)
+    if flags:
+        for flag in flags:
+            parser.add_argument(flag, action="store_true")
     args = parser.parse_args()
     try:
         data = pd.read_csv(args.filename, index_col="Index")
-        if additional_arguments:
+        if additional_arguments or flags:
             return data, args
         else:
             return data

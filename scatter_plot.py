@@ -15,7 +15,8 @@ def check_class_exists(c, u, upper_to_original, errors):
 
 
 data, args = parse_args(
-    "Show scatter plots of class grades by Hogwarts house.", ["class1", "class2"]
+    "Show scatter plots of class grades by Hogwarts house.",
+    additional_arguments=["class1", "class2"],
 )
 class1, class2 = args.class1, args.class2
 upper1, upper2 = map(simplify_string, [class1, class2])
