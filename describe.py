@@ -76,43 +76,28 @@ def format_float(x):
 
 
 data = parse_args("Describe numeric data of the given dataset.")
-
+pairs = [
+    ("count", len),
+    ("mean", ft_mean),
+    ("var", ft_var),
+    ("std", ft_stdev),
+    ("min", ft_min),
+    ("25%", lambda a: percentile(a, 25)),
+    ("50%", lambda a: percentile(a, 50)),
+    ("75%", lambda a: percentile(a, 75)),
+    ("max", ft_max),
+]
+lines = [[name] for name, _ in pairs]
+functions = [func for _, func in pairs]
 columns = [""]
-counts = ["count"]
-means = ["mean"]
-vars = ["var"]
-stds = ["std"]
-mins = ["min"]
-q1 = ["25%"]
-q2 = ["50%"]
-q3 = ["75%"]
-maxs = ["max"]
 
 for column, series in data.select_dtypes(include=[float]).items():
     columns.append(column)
     values = [x for x in series if not isnan(x)]
-    counts.append(format_float(len(values)))
-    means.append(format_float(ft_mean(values)))
-    vars.append(format_float(ft_var(values)))
-    stds.append(format_float(ft_stdev(values)))
-    mins.append(format_float(ft_min(values)))
-    q1.append(format_float(percentile(values, 25)))
-    q2.append(format_float(percentile(values, 50)))
-    q3.append(format_float(percentile(values, 75)))
-    maxs.append(format_float(ft_max(values)))
+    for line, func in zip(lines, functions):
+        line.append(format_float(func(values)))
 
-widths = [
-    max(map(len, strings))
-    for strings in zip(columns, counts, means, vars, stds, mins, q1, q2, q3, maxs)
-]
-
+widths = [max(map(len, strings)) for strings in zip(columns, *lines)]
 print_row(columns, widths)
-print_row(counts, widths)
-print_row(means, widths)
-print_row(vars, widths)
-print_row(stds, widths)
-print_row(mins, widths)
-print_row(q1, widths)
-print_row(q2, widths)
-print_row(q3, widths)
-print_row(maxs, widths)
+for line in lines:
+    print_row(line, widths)
