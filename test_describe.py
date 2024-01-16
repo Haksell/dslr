@@ -1,9 +1,13 @@
 from math import isnan
-from describe import ft_mean, ft_skewness, ft_stdev, ft_variance
+from describe import ft_kurtosis, ft_mean, ft_skewness, ft_stdev, ft_variance
 import numpy as np
 import scipy.stats
 
-datasets = [[round(x, 2) for x in np.random.normal(0, 1, i)] for i in range(20)]
+datasets = [[round(x, 2) for x in np.random.normal(0, 1, i)] for i in range(20)] + [
+    [42, 42],
+    [42, 42, 42],
+    [42, 42, 42, 42],
+]
 
 
 def is_close(x, y):
@@ -40,5 +44,12 @@ def test_skewness():
     )
 
 
-# def test_kurtosis():
-#     pass
+def test_kurtosis():
+    check_func(
+        lambda a: ft_kurtosis(a, population=True),
+        lambda a: scipy.stats.kurtosis(a, bias=True),
+    )
+    check_func(
+        lambda a: ft_kurtosis(a, population=False),
+        lambda a: scipy.stats.kurtosis(a, bias=False),
+    )

@@ -14,10 +14,10 @@
 -   [x] Median Absolute Deviation
 -   [x] Variance
 -   [x] Skewness
--   [ ] Kurtosis
+-   [x] Kurtosis
 -   [x] Range
 -   [x] Interquartile Range
--   [ ] Sample and Population for measures of dispersion
+-   [x] Sample and Population for measures of dispersion
 
 ### Plots
 

@@ -40,6 +40,8 @@ def ft_stdev(arr, *, population=False):
 
 def ft_skewness(data, *, population=False):
     n = len(data)
+    if n <= 1 or all(x == data[0] for x in data):
+        return nan
     if n == 2:
         return 0
     mean = ft_mean(data)
@@ -51,7 +53,22 @@ def ft_skewness(data, *, population=False):
         return skewness * sqrt(n * (n - 1)) / (n - 2)
 
 
-# TODO: kurtosis
+def ft_kurtosis(data, *, population=False):
+    n = len(data)
+    if n <= 1 or all(x == data[0] for x in data):
+        return nan
+    if n == 2:
+        return -2
+    if n == 3:
+        return -1.5
+    mean = sum(data) / n
+    m2 = sum((item - mean) ** 2 for item in data) / n
+    m4 = sum((item - mean) ** 4 for item in data) / n
+    kurtosis = m4 / m2**2
+    if population:
+        return kurtosis - 3
+    else:
+        return ((n**2 - 1.0) * kurtosis - 3 * (n - 1) ** 2.0) / ((n - 2) * (n - 3))
 
 
 def ft_min(arr):
