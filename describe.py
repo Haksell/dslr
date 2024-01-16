@@ -26,7 +26,7 @@ def ft_mean(arr):
     return ft_sum(arr) / len(arr) if arr else nan
 
 
-def ft_var(arr, *, population=False):
+def ft_variance(arr, *, population=False):
     divisor = len(arr) if population else len(arr) - 1
     if divisor <= 0:
         return nan
@@ -35,7 +35,7 @@ def ft_var(arr, *, population=False):
 
 
 def ft_stdev(arr, *, population=False):
-    return sqrt(ft_var(arr, population=population))
+    return sqrt(ft_variance(arr, population=population))
 
 
 def ft_skewness(data, *, population=False):
@@ -43,9 +43,8 @@ def ft_skewness(data, *, population=False):
     if n == 2:
         return 0
     mean = ft_mean(data)
-    variance = ft_var(data, population=True)
-    std_dev = sqrt(variance)
-    skewness = ft_sum([(x - mean) ** 3 for x in data]) / (n * std_dev**3)
+    var = ft_variance(data, population=True)
+    skewness = ft_mean([(x - mean) ** 3 for x in data]) / var**1.5
     if population:
         return skewness
     else:
@@ -113,7 +112,7 @@ def main():
     pairs = [
         ("count", len),
         ("mean", ft_mean),
-        ("var", ft_var),
+        ("var", ft_variance),
         ("std", ft_stdev),
         ("mad", ft_median_absolute_deviation),
         ("range", ft_range),

@@ -1,5 +1,5 @@
 from math import isnan
-from describe import ft_mean, ft_skewness, ft_stdev, ft_var
+from describe import ft_mean, ft_skewness, ft_stdev, ft_variance
 import numpy as np
 import scipy.stats
 
@@ -20,8 +20,8 @@ def test_mean():
 
 
 def test_var():
-    check_func(lambda a: ft_var(a, population=True), lambda a: np.var(a, ddof=0))
-    check_func(lambda a: ft_var(a, population=False), lambda a: np.var(a, ddof=1))
+    check_func(lambda a: ft_variance(a, population=True), lambda a: np.var(a, ddof=0))
+    check_func(lambda a: ft_variance(a, population=False), lambda a: np.var(a, ddof=1))
 
 
 def test_stdev():
