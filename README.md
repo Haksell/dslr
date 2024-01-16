@@ -3,7 +3,7 @@
 ### Describe
 
 -   [ ] Median Absolute Deviation
--   [ ] Variance
+-   [x] Variance
 -   [ ] Skewness
 -   [ ] Kurtosis
 -   [ ] Range
