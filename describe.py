@@ -8,10 +8,11 @@ def quicksort(arr):
     if len(arr) <= 1:
         return arr
     pivot = arr[len(arr) // 2]
-    left = [x for x in arr if x < pivot]
-    middle = [x for x in arr if x == pivot]
-    right = [x for x in arr if x > pivot]
-    return quicksort(left) + middle + quicksort(right)
+    return (
+        quicksort([x for x in arr if x < pivot])
+        + [x for x in arr if x == pivot]
+        + quicksort([x for x in arr if x > pivot])
+    )
 
 
 def ft_sum(arr):
@@ -37,35 +38,19 @@ def ft_stdev(arr):
 
 
 def ft_min(arr):
-    if not arr:
-        return nan
-    res = arr[0]
-    for x in arr[1:]:
-        if x < res:
-            res = x
-    return res
+    return arr[0] if arr else nan
 
 
 def ft_max(arr):
-    if not arr:
-        return nan
-    res = arr[0]
-    for x in arr[1:]:
-        if x > res:
-            res = x
-    return res
+    return arr[-1] if arr else nan
 
 
 def ft_percentile(arr, p):
-    assert 0 <= p <= 100
-    if p == 0:
-        return ft_min(arr)
-    if p == 100:
-        return ft_max(arr)
     if not arr:
         return nan
-    arr = quicksort(arr)
     idx = p / 100 * (len(arr) - 1)
+    if idx.is_integer():
+        return arr[int(idx)]
     before = arr[floor(idx)]
     after = arr[ceil(idx)]
     interp = idx % 1
@@ -80,7 +65,7 @@ def ft_median_absolute_deviation(arr):
     if not arr:
         return nan
     median = ft_median(arr)
-    return ft_median([abs(x - median) for x in arr])
+    return ft_median(quicksort([abs(x - median) for x in arr]))
 
 
 def ft_range(arr):
@@ -126,7 +111,7 @@ columns = [""]
 
 for column, series in data.select_dtypes(include=[float]).items():
     columns.append(column)
-    values = [x for x in series if not isnan(x)]
+    values = quicksort([x for x in series if not isnan(x)])
     for line, func in zip(lines, functions):
         line.append(format_float(func(values)))
 
