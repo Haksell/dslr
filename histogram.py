@@ -20,7 +20,7 @@ BINS = 16
 TITLE = "Histograms of Class Grades by Hogwarts House"
 HOUSE_COLORS = {
     "Gryffindor": "#D62728",
-    "Hufflepuff": "#FF7F0E",
+    "Hufflepuff": "#ECB939",
     "Ravenclaw": "#1F77B4",
     "Slytherin": "#2CA02C",
 }
