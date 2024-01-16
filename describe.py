@@ -131,6 +131,8 @@ def main():
         ("mean", ft_mean),
         ("var", ft_variance),
         ("std", ft_stdev),
+        ("skew", ft_skewness),
+        ("kurt", ft_kurtosis),
         ("mad", ft_median_absolute_deviation),
         ("range", ft_range),
         ("iqr", ft_interquartile_range),
