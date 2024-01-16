@@ -15,11 +15,15 @@ def ft_mean(arr):
     return ft_sum(arr) / len(arr) if arr else nan
 
 
-def ft_stdev(arr):
+def ft_var(arr):
     if len(arr) <= 1:
         return nan
     m = ft_mean(arr)
-    return sqrt(ft_sum((x - m) ** 2 for x in arr) / (len(arr) - 1))
+    return ft_sum((x - m) ** 2 for x in arr) / (len(arr) - 1)
+
+
+def ft_stdev(arr):
+    return sqrt(ft_var(arr))
 
 
 def ft_min(arr):
@@ -72,11 +76,11 @@ def format_float(x):
 
 
 data = parse_args("Describe numeric data of the given dataset.")
-# print(data.describe(), end="\n\n")
 
 columns = [""]
 counts = ["count"]
 means = ["mean"]
+vars = ["var"]
 stds = ["std"]
 mins = ["min"]
 q1 = ["25%"]
@@ -89,6 +93,7 @@ for column, series in data.select_dtypes(include=[float]).items():
     values = [x for x in series if not isnan(x)]
     counts.append(format_float(len(values)))
     means.append(format_float(ft_mean(values)))
+    vars.append(format_float(ft_var(values)))
     stds.append(format_float(ft_stdev(values)))
     mins.append(format_float(ft_min(values)))
     q1.append(format_float(percentile(values, 25)))
@@ -98,12 +103,13 @@ for column, series in data.select_dtypes(include=[float]).items():
 
 widths = [
     max(map(len, strings))
-    for strings in zip(columns, counts, means, stds, mins, q1, q2, q3, maxs)
+    for strings in zip(columns, counts, means, vars, stds, mins, q1, q2, q3, maxs)
 ]
 
 print_row(columns, widths)
 print_row(counts, widths)
 print_row(means, widths)
+print_row(vars, widths)
 print_row(stds, widths)
 print_row(mins, widths)
 print_row(q1, widths)
