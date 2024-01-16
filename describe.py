@@ -26,15 +26,33 @@ def ft_mean(arr):
     return ft_sum(arr) / len(arr) if arr else nan
 
 
-def ft_var(arr):
-    if len(arr) <= 1:
+def ft_var(arr, *, population=False):
+    divisor = len(arr) if population else len(arr) - 1
+    if divisor <= 0:
         return nan
     m = ft_mean(arr)
-    return ft_sum((x - m) ** 2 for x in arr) / (len(arr) - 1)
+    return ft_sum((x - m) ** 2 for x in arr) / divisor
 
 
-def ft_stdev(arr):
-    return sqrt(ft_var(arr))
+def ft_stdev(arr, *, population=False):
+    return sqrt(ft_var(arr, population=population))
+
+
+def ft_skewness(data, *, population=False):
+    n = len(data)
+    if n == 2:
+        return 0
+    mean = ft_mean(data)
+    variance = ft_var(data, population=True)
+    std_dev = sqrt(variance)
+    skewness = ft_sum([(x - mean) ** 3 for x in data]) / (n * std_dev**3)
+    if population:
+        return skewness
+    else:
+        return skewness * sqrt(n * (n - 1)) / (n - 2)
+
+
+# TODO: kurtosis
 
 
 def ft_min(arr):
@@ -89,33 +107,38 @@ def format_float(x):
     return "NaN" if isnan(x) else f"{x:.6f}"
 
 
-data = parse_args("Describe numeric data of the given dataset.")
-# print(data.describe(), "\n\n")
-pairs = [
-    ("count", len),
-    ("mean", ft_mean),
-    ("var", ft_var),
-    ("std", ft_stdev),
-    ("mad", ft_median_absolute_deviation),
-    ("range", ft_range),
-    ("iqr", ft_interquartile_range),
-    ("min", ft_min),
-    ("25%", lambda a: ft_percentile(a, 25)),
-    ("50%", ft_median),
-    ("75%", lambda a: ft_percentile(a, 75)),
-    ("max", ft_max),
-]
-lines = [[name] for name, _ in pairs]
-functions = [func for _, func in pairs]
-columns = [""]
+def main():
+    data = parse_args("Describe numeric data of the given dataset.")
+    # print(data.describe(), "\n\n")
+    pairs = [
+        ("count", len),
+        ("mean", ft_mean),
+        ("var", ft_var),
+        ("std", ft_stdev),
+        ("mad", ft_median_absolute_deviation),
+        ("range", ft_range),
+        ("iqr", ft_interquartile_range),
+        ("min", ft_min),
+        ("25%", lambda a: ft_percentile(a, 25)),
+        ("50%", ft_median),
+        ("75%", lambda a: ft_percentile(a, 75)),
+        ("max", ft_max),
+    ]
+    lines = [[name] for name, _ in pairs]
+    functions = [func for _, func in pairs]
+    columns = [""]
 
-for column, series in data.select_dtypes(include=[float]).items():
-    columns.append(column)
-    values = quicksort([x for x in series if not isnan(x)])
-    for line, func in zip(lines, functions):
-        line.append(format_float(func(values)))
+    for column, series in data.select_dtypes(include=[float]).items():
+        columns.append(column)
+        values = quicksort([x for x in series if not isnan(x)])
+        for line, func in zip(lines, functions):
+            line.append(format_float(func(values)))
 
-widths = [max(map(len, strings)) for strings in zip(columns, *lines)]
-print_row(columns, widths)
-for line in lines:
-    print_row(line, widths)
+    widths = [max(map(len, strings)) for strings in zip(columns, *lines)]
+    print_row(columns, widths)
+    for line in lines:
+        print_row(line, widths)
+
+
+if __name__ == "__main__":
+    main()
