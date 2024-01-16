@@ -8,7 +8,6 @@
 -   [ ] Kurtosis
 -   [ ] Range
 -   [ ] Interquartile Range
--   [ ] Coefficient of Variation
 
 ### Plots
 
