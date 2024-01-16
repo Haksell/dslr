@@ -3,8 +3,8 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
-from parse_args import parse_args
 from sklearn.preprocessing import MinMaxScaler
+from utils import HOUSE_COLORS, parse_args
 
 
 def get_numeric_columns(data):
@@ -18,12 +18,6 @@ def standardize_columns(data, columns):
 _, WIDTH = DIMENSIONS = (3, 5)
 BINS = 16
 TITLE = "Histograms of Class Grades by Hogwarts House"
-HOUSE_COLORS = {
-    "Gryffindor": "#D62728",
-    "Hufflepuff": "#ECB939",
-    "Ravenclaw": "#1F77B4",
-    "Slytherin": "#2CA02C",
-}
 
 data = parse_args("Show histograms of class grades by Hogwarts house.")
 standardized_data = standardize_columns(data, get_numeric_columns(data).columns)

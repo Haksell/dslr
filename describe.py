@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from math import ceil, floor, isnan, nan, sqrt
-from parse_args import parse_args
+from utils import parse_args
 
 
 def ft_sum(arr):

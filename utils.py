@@ -2,6 +2,13 @@ import argparse
 import pandas as pd
 import sys
 
+HOUSE_COLORS = {
+    "Gryffindor": "#D62728",
+    "Hufflepuff": "#ECB939",
+    "Ravenclaw": "#1F77B4",
+    "Slytherin": "#2CA02C",
+}
+
 
 def parse_args(description):
     parser = argparse.ArgumentParser(description=description)

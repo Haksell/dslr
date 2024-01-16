@@ -2,36 +2,22 @@
 
 from matplotlib import pyplot as plt
 import pandas as pd
-from parse_args import parse_args
 from sklearn.preprocessing import MinMaxScaler
-
-
-def get_numeric_columns(data):
-    return data.select_dtypes(include=[float])
-
-
-def standardize_columns(data, columns):
-    return pd.DataFrame(MinMaxScaler().fit_transform(data[columns]), columns=columns)
-
+from utils import HOUSE_COLORS, parse_args
 
 _, WIDTH = DIMENSIONS = (3, 5)
 TITLE = "Scatter Plots of Class Grades by Hogwarts House"
-HOUSE_COLORS = {
-    "Gryffindor": "#D62728",
-    "Hufflepuff": "#FF7F0E",
-    "Ravenclaw": "#1F77B4",
-    "Slytherin": "#2CA02C",
-}
 
 data = parse_args("Show scatter plots of class grades by Hogwarts house.")
-standardized_data = standardize_columns(data, get_numeric_columns(data).columns)
+numeric_columns = data.select_dtypes(include=[float]).columns
+standardized_data = pd.DataFrame(
+    MinMaxScaler().fit_transform(data[numeric_columns]), columns=numeric_columns
+)
 data["Average"] = standardized_data.mean(axis=1)
 grouped_data = data.groupby("Hogwarts House")
 fig = plt.figure(figsize=(20, 10))
 
-for i, col in enumerate(get_numeric_columns(data)):
-    if i == 13:
-        break
+for i, col in enumerate(numeric_columns):
     ax = plt.subplot2grid(DIMENSIONS, divmod(i, WIDTH))
     for name, group in grouped_data:
         ax.scatter(

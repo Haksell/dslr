@@ -2,7 +2,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from parse_args import parse_args
+from utils import parse_args
 
 TITLE = "Scatter Plot of Log-Transformed Features"
 
