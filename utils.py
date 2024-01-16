@@ -10,12 +10,19 @@ HOUSE_COLORS = {
 }
 
 
-def parse_args(description):
+def parse_args(description, additional_arguments=None):
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument("filename", type=str, help="Filename of the CSV.")
+    if additional_arguments:
+        for arg in additional_arguments:
+            parser.add_argument(arg, type=str)
     args = parser.parse_args()
     try:
-        return pd.read_csv(args.filename, index_col="Index")
+        data = pd.read_csv(args.filename, index_col="Index")
+        if additional_arguments:
+            return data, args
+        else:
+            return data
     except FileNotFoundError:
         print(f"Error: File {args.filename} not found.")
         sys.exit(1)
