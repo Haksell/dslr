@@ -1,3 +1,12 @@
+# Mandatory
+
+-   [x] describe.py
+-   [x] histogram.py
+-   [x] scatter_plot_classes.py
+-   [x] pair_plot.py
+-   [ ] logreg_train.py
+-   [ ] logreg_predict.py
+
 # Bonus
 
 ### Describe
