@@ -61,14 +61,14 @@ def ft_kurtosis(data, *, population=False):
         return -2
     if n == 3:
         return -1.5
-    mean = sum(data) / n
-    m2 = sum((item - mean) ** 2 for item in data) / n
-    m4 = sum((item - mean) ** 4 for item in data) / n
+    mean = ft_mean(data)
+    m2 = ft_sum((item - mean) ** 2 for item in data) / n
+    m4 = ft_sum((item - mean) ** 4 for item in data) / n
     kurtosis = m4 / m2**2
     if population:
         return kurtosis - 3
     else:
-        return ((n**2 - 1.0) * kurtosis - 3 * (n - 1) ** 2.0) / ((n - 2) * (n - 3))
+        return (kurtosis * (n + 1) - 3 * (n - 1)) * (n - 1) / (n - 2) / (n - 3)
 
 
 def ft_min(arr):
