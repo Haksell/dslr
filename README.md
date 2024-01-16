@@ -2,7 +2,7 @@
 
 -   [x] describe.py
 -   [x] histogram.py
--   [x] scatter_plot_classes.py
+-   [x] scatter_plot.py
 -   [x] pair_plot.py
 -   [ ] logreg_train.py
 -   [ ] logreg_predict.py
@@ -22,7 +22,7 @@
 ### Plots
 
 -   [x] scatter_plot_against_mean.py
--   [x] scatter_plot_1v1.py
+-   [x] scatter_plot_classes.py
 
 ### Regression
 
