@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 from math import ceil, floor, isnan, nan, sqrt
 from utils import parse_args

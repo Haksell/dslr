@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 import matplotlib.pyplot as plt
 import seaborn as sns

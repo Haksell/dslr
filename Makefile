@@ -1,5 +1,5 @@
 install:
-	pip install --upgrade matplotlib pandas PyQT5 pytest scikit-learn seaborn
+	/usr/bin/pip install --upgrade matplotlib pandas PyQT5 pytest scikit-learn seaborn
 
 clean:
 	rm -rf __pycache__ .pytest_cache
