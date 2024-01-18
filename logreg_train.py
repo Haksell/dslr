@@ -10,7 +10,7 @@ from utils import parse_args
 
 
 def sigmoid(x):
-    return exp(x) / (exp(x) + 1)
+    return 1 / (1 + exp(-x))
 
 
 def logit(x):
