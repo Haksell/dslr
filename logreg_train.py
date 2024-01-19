@@ -12,26 +12,16 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 
-def clamp(x, mini, maxi):
-    return mini if x < mini else maxi if x > maxi else x
-
-
-def compute_cost(X, y, theta):
-    h = clamp(sigmoid(X @ theta), 1e6, 1 - 1e6)
-    return ((-y).T @ np.log(h) - (1 - y).T @ np.log(1 - h)) / len(y)
-
-
-def gradient_descent(X, y, theta, alpha, num_iters):
-    m = len(y)
+def gradient_descent(X, y, learning_rate, num_iters):
+    theta = np.zeros(X.shape[1])
     for _ in range(num_iters):
-        gradient = X.T @ (sigmoid(X @ theta) - y) / m
-        theta = theta - alpha * gradient
+        gradient = X.T @ (sigmoid(X @ theta) - y) / len(y)
+        theta -= learning_rate * gradient
     return theta
 
 
 def predict(X, all_theta):
-    predictions = X @ all_theta
-    return np.argmax(predictions, axis=1)
+    return np.argmax(X @ all_theta, axis=1)
 
 
 def main():
@@ -49,7 +39,7 @@ def main():
     num_labels = len(np.unique(y))
     _, n = X.shape
 
-    alpha = 0.01
+    learning_rate = 0.01
     num_iters = 300
 
     if args.debug:
@@ -65,9 +55,8 @@ def main():
             all_theta = np.zeros((n, num_labels))
             for i in range(num_labels):
                 temp_y = np.where(y_train == i, 1, 0)
-                theta = np.zeros(n)
                 all_theta[:, i] = gradient_descent(
-                    X_train, temp_y, theta, alpha, num_iters
+                    X_train, temp_y, learning_rate, num_iters
                 )
             predictions = predict(X_test, all_theta)
             accuracy = accuracy_score(y_test, predictions)

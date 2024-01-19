@@ -28,7 +28,6 @@
 
 -   [ ] Train using scikit-learn
 -   [ ] Use Birthday and Best Hand features
--   [ ] One-vs-One
 -   [ ] Stochastic Gradient Descent
 -   [ ] Mini-batch Gradient Descent
 -   [ ] Conjugate Gradient Descent
