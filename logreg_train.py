@@ -23,14 +23,17 @@ def predict(X, all_theta):
 
 
 def split_data(data):
-    X = data.iloc[:, 5:].values
+    data["Best Hand"] = data["Best Hand"].map({"Left": 0, "Right": 1})
+    data["Month"] = data["Birthday"].apply(lambda x: int(x[5:7]))
+    data["Day"] = data["Birthday"].apply(lambda x: int(x[8:10]))
+    X = data.iloc[:, 4:].values
     means = np.nanmean(X, axis=0)
     X = np.where(np.isnan(X), means, X)
     X = (X - means) / np.std(X, axis=0)
     X = np.hstack([np.ones((X.shape[0], 1)), X])
     y = data["Hogwarts House"]
     houses = {house: i for i, house in enumerate(y.unique())}
-    y = y.apply(houses.get)
+    y = data["Hogwarts House"].map(houses)
     num_labels = len(houses)
     return X, y, num_labels
 
