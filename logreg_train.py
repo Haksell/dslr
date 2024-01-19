@@ -13,12 +13,13 @@ def sigmoid(z):
 def gradient_descent(X, y, *, learning_rate=0.01, num_iters=300):
     theta = np.zeros(X.shape[1])
     for _ in range(num_iters):
-        gradient = X.T @ (sigmoid(X @ theta) - y) / len(y)
+        y_hat = sigmoid(X @ theta)
+        gradient = X.T @ (y_hat - y) / len(y)
         theta -= learning_rate * gradient
     return theta
 
 
-def predict(X, all_theta):
+def predict_ovr(X, all_theta):
     return np.argmax(X @ all_theta, axis=1)
 
 
@@ -61,7 +62,7 @@ def main():
                     for i in range(num_labels)
                 ]
             )
-            predictions = predict(X_test, theta)
+            predictions = predict_ovr(X_test, theta)
             accuracy = accuracy_score(y_test, predictions)
             accuracies.append(accuracy)
             print(f"Accuracy for fold {fold_idx}: {accuracy:.3f}")
