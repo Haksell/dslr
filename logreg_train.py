@@ -10,7 +10,7 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 
-def gradient_descent(X, y, learning_rate, num_iters):
+def gradient_descent(X, y, *, learning_rate=0.01, num_iters=300):
     theta = np.zeros(X.shape[1])
     for _ in range(num_iters):
         gradient = X.T @ (sigmoid(X @ theta) - y) / len(y)
@@ -22,23 +22,24 @@ def predict(X, all_theta):
     return np.argmax(X @ all_theta, axis=1)
 
 
-def main():
-    data, args = parse_args(
-        "Train a Logistic Regression model using Gradient Descent.", flags=["--debug"]
-    )
+def split_data(data):
     X = data.iloc[:, 5:].values
     means = np.nanmean(X, axis=0)
     X = np.where(np.isnan(X), means, X)
     X = (X - means) / np.std(X, axis=0)
     X = np.hstack([np.ones((X.shape[0], 1)), X])
-    y = data["Hogwarts House"].apply(
-        {"Gryffindor": 0, "Hufflepuff": 1, "Ravenclaw": 2, "Slytherin": 3}.get
-    )
-    num_labels = len(np.unique(y))
-    _, n = X.shape
+    y = data["Hogwarts House"]
+    houses = {house: i for i, house in enumerate(y.unique())}
+    y = y.apply(houses.get)
+    num_labels = len(houses)
+    return X, y, num_labels
 
-    learning_rate = 0.01
-    num_iters = 300
+
+def main():
+    data, args = parse_args(
+        "Train a Logistic Regression model using Gradient Descent.", flags=["--debug"]
+    )
+    X, y, num_labels = split_data(data)
 
     if args.debug:
         kf = KFold(n_splits=5, shuffle=True)
@@ -52,9 +53,7 @@ def main():
             )
             theta = np.column_stack(
                 [
-                    gradient_descent(
-                        X_train, np.where(y_train == i, 1, 0), learning_rate, num_iters
-                    )
+                    gradient_descent(X_train, np.where(y_train == i, 1, 0))
                     for i in range(num_labels)
                 ]
             )
@@ -63,7 +62,6 @@ def main():
             accuracies.append(accuracy)
             print(f"Accuracy for fold {fold_idx}: {accuracy:.3f}")
         print(f"Mean accuracy: {np.mean(accuracies):.3f}")
-        print(theta)
 
 
 if __name__ == "__main__":
