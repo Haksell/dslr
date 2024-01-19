@@ -1,10 +1,8 @@
 #!/usr/bin/python
 
 import numpy as np
-from sklearn.impute import SimpleImputer
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import KFold
-from sklearn.preprocessing import StandardScaler
 from utils import parse_args
 
 
@@ -28,10 +26,10 @@ def main():
     data, args = parse_args(
         "Train a Logistic Regression model using Gradient Descent.", flags=["--debug"]
     )
-    scaler = StandardScaler()
-    X = scaler.fit_transform(
-        SimpleImputer(strategy="mean").fit_transform(data.iloc[:, 5:])
-    )
+    X = data.iloc[:, 5:].values
+    means = np.nanmean(X, axis=0)
+    X = np.where(np.isnan(X), means, X)
+    X = (X - means) / np.std(X, axis=0)
     X = np.hstack([np.ones((X.shape[0], 1)), X])
     y = data["Hogwarts House"].apply(
         {"Gryffindor": 0, "Hufflepuff": 1, "Ravenclaw": 2, "Slytherin": 3}.get
@@ -52,18 +50,20 @@ def main():
                 y[train_index],
                 y[test_index],
             )
-            all_theta = np.zeros((n, num_labels))
-            for i in range(num_labels):
-                temp_y = np.where(y_train == i, 1, 0)
-                all_theta[:, i] = gradient_descent(
-                    X_train, temp_y, learning_rate, num_iters
-                )
-            predictions = predict(X_test, all_theta)
+            theta = np.column_stack(
+                [
+                    gradient_descent(
+                        X_train, np.where(y_train == i, 1, 0), learning_rate, num_iters
+                    )
+                    for i in range(num_labels)
+                ]
+            )
+            predictions = predict(X_test, theta)
             accuracy = accuracy_score(y_test, predictions)
             accuracies.append(accuracy)
             print(f"Accuracy for fold {fold_idx}: {accuracy:.3f}")
-
         print(f"Mean accuracy: {np.mean(accuracies):.3f}")
+        print(theta)
 
 
 if __name__ == "__main__":
