@@ -8,10 +8,17 @@ from utils import parse_args
 import sys
 
 FILENAME_PREDICTIONS = "houses.csv"
-EXPECTED_FEATURES = 17
+EXPECTED_FEATURES = 16
 
 
 def parse_parameters(parameters_filename):
+    def check_array(array, name):
+        assert (
+            isinstance(array, list)
+            and len(array) == EXPECTED_FEATURES
+            and all(isinstance(x, Number) for x in means)
+        ), f'"{name}" should be an array of {EXPECTED_FEATURES} numbers'
+
     try:
         parameters = json.load(open(parameters_filename))
         assert isinstance(parameters, dict), "JSON file should represent a dictionary"
@@ -27,20 +34,21 @@ def parse_parameters(parameters_filename):
         )
         assert (
             isinstance(houses, dict)
+            and len(houses) >= 2
             and all(
                 isinstance(k, str) and isinstance(v, int) for k, v in houses.items()
             )
             and sorted(houses.values()) == list(range(len(houses)))
         ), '"houses" should be a correct mapping from house names to indices'
-        # TODO:check means
-        # TODO:check stds
+        check_array(means, "means")
+        check_array(stds, "stds")
         assert (
             isinstance(theta, list)
-            and len(theta) == EXPECTED_FEATURES
+            and len(theta) == EXPECTED_FEATURES + 1
             and all(isinstance(row, list) and len(row) == len(houses) for row in theta)
             and all(isinstance(x, Number) for row in theta for x in row)
-        ), f'"theta" should be a {EXPECTED_FEATURES}x{len(houses)} matrix of numbers'
-        return houses, means, stds, np.asarray(theta)
+        ), f'"theta" should be a {EXPECTED_FEATURES+1}x{len(houses)} matrix of numbers'
+        return houses, np.asarray(means), np.asarray(stds), np.asarray(theta)
     except Exception as e:
         print(f"Failed to read parameters file: {e}")
         sys.exit(1)
