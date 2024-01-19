@@ -42,7 +42,7 @@ def stochastic_gradient_descent(X, y, *, learning_rate=0.01, epochs=400):
 
 
 def minibatch_rmsprop(
-    X, y, *, learning_rate=0.02, epochs=100, batch_size=64, beta=0.9, epsilon=1e-8
+    X, y, *, learning_rate=0.005, epochs=200, batch_size=64, beta=0.9, epsilon=1e-8
 ):
     theta = np.zeros(X.shape[1])
     S = np.zeros(X.shape[1])
