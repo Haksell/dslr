@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 import numpy as np
-from sklearn.metrics import accuracy_score
 from sklearn.model_selection import KFold
 from utils import parse_args
 
@@ -19,11 +18,17 @@ def gradient_descent(X, y, *, learning_rate=0.01, num_iters=300):
     return theta
 
 
+def train_ovr(X, y, num_labels):
+    return np.column_stack(
+        [gradient_descent(X, np.where(y == i, 1, 0)) for i in range(num_labels)]
+    )
+
+
 def predict_ovr(X, all_theta):
     return np.argmax(X @ all_theta, axis=1)
 
 
-def split_data(data):
+def process_data(data):
     data["Best Hand"] = data["Best Hand"].map({"Left": 0, "Right": 1})
     data["Month"] = data["Birthday"].apply(lambda x: int(x[5:7]))
     data["Day"] = data["Birthday"].apply(lambda x: int(x[8:10]))
@@ -43,8 +48,7 @@ def main():
     data, args = parse_args(
         "Train a Logistic Regression model using Gradient Descent.", flags=["--debug"]
     )
-    X, y, num_labels = split_data(data)
-
+    X, y, num_labels = process_data(data)
     if args.debug:
         accuracies = []
         for fold_idx, (train_index, test_index) in enumerate(
@@ -56,14 +60,9 @@ def main():
                 y[train_index],
                 y[test_index],
             )
-            theta = np.column_stack(
-                [
-                    gradient_descent(X_train, np.where(y_train == i, 1, 0))
-                    for i in range(num_labels)
-                ]
-            )
+            theta = train_ovr(X_train, y_train, num_labels)
             predictions = predict_ovr(X_test, theta)
-            accuracy = accuracy_score(y_test, predictions)
+            accuracy = (y_test == predictions).mean()
             accuracies.append(accuracy)
             print(f"Accuracy for fold {fold_idx}: {accuracy:.3f}")
         print(f"Mean accuracy: {np.mean(accuracies):.3f}")
