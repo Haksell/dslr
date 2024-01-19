@@ -24,7 +24,7 @@ def compute_cost(X, y, theta):
 def gradient_descent(X, y, theta, alpha, num_iters):
     m = len(y)
     for _ in range(num_iters):
-        gradient = (1 / m) * X.T @ (sigmoid(X @ theta) - y)
+        gradient = X.T @ (sigmoid(X @ theta) - y) / m
         theta = theta - alpha * gradient
     return theta
 
