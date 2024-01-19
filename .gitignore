@@ -2,3 +2,4 @@ __pycache__
 lol.py
 .pytest_cache
 houses.csv
+parameters.json
