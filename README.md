@@ -29,6 +29,6 @@
 -   [x] Stochastic Gradient Descent
 -   [x] Mini-batch Gradient Descent
 -   [x] RMSProp
--   [ ] Gradient Descent With Momentum
+-   [x] Gradient Descent With Momentum
 -   [ ] Adam
 -   [ ] SAGA

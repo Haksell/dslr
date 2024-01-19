@@ -2,8 +2,8 @@ import argparse
 import pandas as pd
 import sys
 
-OPTIMIZER_CHOICES = ["batch", "minibatch", "rmsprop", "sgd"]
 OPTIMIZER_DEFAULT = "batch"
+OPTIMIZER_CHOICES = [OPTIMIZER_DEFAULT, "minibatch", "momentum", "rmsprop", "sgd"]
 HOUSE_COLORS = {
     "Gryffindor": "#D62728",
     "Hufflepuff": "#ECB939",

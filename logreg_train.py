@@ -54,9 +54,22 @@ def minibatch_rmsprop(
     return theta
 
 
+def minibatch_momentum(
+    X, y, *, learning_rate=0.005, epochs=200, batch_size=64, gamma=0.9
+):
+    theta = np.zeros(X.shape[1])
+    V = np.zeros(X.shape[1])
+    for _ in range(epochs):
+        gradient = minibatch_get_gradient(X, y, batch_size, theta)
+        V = gamma * V + learning_rate * gradient
+        theta -= V
+    return theta
+
+
 OPTIMIZERS = {
     "batch": batch_gradient_descent,
     "minibatch": minibatch_gradient_descent,
+    "momentum": minibatch_momentum,
     "rmsprop": minibatch_rmsprop,
     "sgd": stochastic_gradient_descent,
 }
