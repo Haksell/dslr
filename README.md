@@ -28,6 +28,7 @@
 
 -   [x] Stochastic Gradient Descent
 -   [x] Mini-batch Gradient Descent
--   [ ] Conjugate Gradient Descent
+-   [ ] Adam
 -   [ ] Newton-Raphson Method
--   [ ] BFGS
+-   [ ] LBFGS
+-   [ ] SAGA

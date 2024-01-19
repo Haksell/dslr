@@ -12,7 +12,7 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 
-def minibatch_gradient_descent(X, y, *, learning_rate=0.005, epochs=500, batch_size=64):
+def minibatch_gradient_descent(X, y, *, learning_rate=0.005, epochs=200, batch_size=64):
     theta = np.zeros(X.shape[1])
     for _ in range(epochs):
         if batch_size >= len(y):
@@ -28,13 +28,13 @@ def minibatch_gradient_descent(X, y, *, learning_rate=0.005, epochs=500, batch_s
     return theta
 
 
-def batch_gradient_descent(X, y, *, learning_rate=0.01, epochs=250):
+def batch_gradient_descent(X, y, *, learning_rate=0.01, epochs=100):
     return minibatch_gradient_descent(
         X, y, learning_rate=learning_rate, epochs=epochs, batch_size=len(y)
     )
 
 
-def stochastic_gradient_descent(X, y, *, learning_rate=0.0025, epochs=1000):
+def stochastic_gradient_descent(X, y, *, learning_rate=0.0025, epochs=400):
     return minibatch_gradient_descent(
         X, y, learning_rate=learning_rate, epochs=epochs, batch_size=1
     )
