@@ -45,9 +45,10 @@ def main():
     X, y, num_labels = split_data(data)
 
     if args.debug:
-        kf = KFold(n_splits=5, shuffle=True)
         accuracies = []
-        for fold_idx, (train_index, test_index) in enumerate(kf.split(X)):
+        for fold_idx, (train_index, test_index) in enumerate(
+            KFold(n_splits=5, shuffle=True).split(X)
+        ):
             X_train, X_test, y_train, y_test = (
                 X[train_index],
                 X[test_index],
