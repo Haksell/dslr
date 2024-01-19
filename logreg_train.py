@@ -76,10 +76,10 @@ def main():
     try:
         json.dump(
             {
-                "theta": list(map(list, theta)),
+                "houses": houses,
                 "means": list(means),
                 "stds": list(stds),
-                "houses": houses,
+                "theta": list(map(list, theta)),
             },
             open(FILENAME_PARAMETERS, "w"),
         )
