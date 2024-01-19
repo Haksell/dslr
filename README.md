@@ -4,8 +4,8 @@
 -   [x] histogram.py
 -   [x] scatter_plot.py
 -   [x] pair_plot.py
--   [ ] logreg_train.py
--   [ ] logreg_predict.py
+-   [x] logreg_train.py
+-   [x] logreg_predict.py
 
 # Bonus
 
