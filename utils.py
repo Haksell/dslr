@@ -10,9 +10,17 @@ HOUSE_COLORS = {
 }
 
 
-def parse_args(description, *, additional_arguments=None, flags=None):
+def parse_args(description, *, additional_arguments=None, flags=None, optimizer=False):
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument("filename", type=str, help="Filename of the CSV.")
+    if optimizer:
+        parser.add_argument(
+            "--optimizer",
+            type=str,
+            choices=["batch", "minibatch", "stochastic"],
+            default="batch",
+            help="Type of optimizer to use.",
+        )
     if additional_arguments:
         for arg in additional_arguments:
             parser.add_argument(arg, type=str)

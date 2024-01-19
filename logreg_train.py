@@ -12,18 +12,37 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 
-def gradient_descent(X, y, *, learning_rate=0.01, num_iters=300):
+def minibatch_gradient_descent(X, y, *, learning_rate=0.005, epochs=500, batch_size=64):
     theta = np.zeros(X.shape[1])
-    for _ in range(num_iters):
-        y_hat = sigmoid(X @ theta)
-        gradient = X.T @ (y_hat - y) / len(y)
+    for _ in range(epochs):
+        if batch_size >= len(y):
+            X_batch = X
+            y_batch = y
+        else:
+            indices = np.random.choice(len(y), batch_size, replace=False)
+            X_batch = X[indices]
+            y_batch = y[indices]
+        y_hat = sigmoid(X_batch @ theta)
+        gradient = X_batch.T @ (y_hat - y_batch) / batch_size
         theta -= learning_rate * gradient
     return theta
 
 
-def train_ovr(X, y, num_labels):
+def batch_gradient_descent(X, y, *, learning_rate=0.01, epochs=250):
+    return minibatch_gradient_descent(
+        X, y, learning_rate=learning_rate, epochs=epochs, batch_size=len(y)
+    )
+
+
+def stochastic_gradient_descent(X, y, *, learning_rate=0.0025, epochs=1000):
+    return minibatch_gradient_descent(
+        X, y, learning_rate=learning_rate, epochs=epochs, batch_size=1
+    )
+
+
+def train_ovr(optimizer, X, y, num_labels):
     return np.column_stack(
-        [gradient_descent(X, np.where(y == i, 1, 0)) for i in range(num_labels)]
+        [optimizer(X, np.where(y == i, 1, 0)) for i in range(num_labels)]
     )
 
 
@@ -52,8 +71,14 @@ def process_data(data, *, houses=None, means=None, stds=None):
 
 def main():
     data, args = parse_args(
-        "Train a Logistic Regression model using Gradient Descent.", flags=["--debug"]
+        "Train a Logistic Regression model using Gradient Descent.",
+        flags=["--debug"],
+        optimizer=True,
     )
+    optimizer = {
+        "stochastic": stochastic_gradient_descent,
+        "minibatch": minibatch_gradient_descent,
+    }.get(args.optimizer, batch_gradient_descent)
     X, y, houses, means, stds = process_data(data)
     if args.debug:
         accuracies = []
@@ -66,13 +91,13 @@ def main():
                 y[train_index],
                 y[test_index],
             )
-            theta = train_ovr(X_train, y_train, len(houses))
+            theta = train_ovr(optimizer, X_train, y_train, len(houses))
             predictions = predict_ovr(X_test, theta)
             accuracy = (y_test == predictions).mean()
             accuracies.append(accuracy)
             print(f"Accuracy for fold {fold_idx}: {accuracy:.3f}")
         print(f"Mean accuracy: {np.mean(accuracies):.3f}")
-    theta = train_ovr(X, y, len(houses))
+    theta = train_ovr(optimizer, X, y, len(houses))
     try:
         json.dump(
             {

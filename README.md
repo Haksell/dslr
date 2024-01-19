@@ -26,8 +26,8 @@
 
 ### Regression
 
--   [ ] Stochastic Gradient Descent
--   [ ] Mini-batch Gradient Descent
+-   [x] Stochastic Gradient Descent
+-   [x] Mini-batch Gradient Descent
 -   [ ] Conjugate Gradient Descent
 -   [ ] Newton-Raphson Method
 -   [ ] BFGS
