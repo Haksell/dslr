@@ -12,32 +12,54 @@ def sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 
-def minibatch_gradient_descent(X, y, *, learning_rate=0.005, epochs=200, batch_size=64):
+def minibatch_get_gradient(X, y, batch_size, theta):
+    if batch_size < len(y):
+        indices = np.random.choice(len(y), batch_size, replace=False)
+        X = X[indices]
+        y = y[indices]
+    y_hat = sigmoid(X @ theta)
+    return X.T @ (y_hat - y) / batch_size
+
+
+def minibatch_gradient_descent(X, y, *, learning_rate=0.02, epochs=200, batch_size=64):
     theta = np.zeros(X.shape[1])
     for _ in range(epochs):
-        if batch_size >= len(y):
-            X_batch = X
-            y_batch = y
-        else:
-            indices = np.random.choice(len(y), batch_size, replace=False)
-            X_batch = X[indices]
-            y_batch = y[indices]
-        y_hat = sigmoid(X_batch @ theta)
-        gradient = X_batch.T @ (y_hat - y_batch) / batch_size
+        gradient = minibatch_get_gradient(X, y, batch_size, theta)
         theta -= learning_rate * gradient
     return theta
 
 
-def batch_gradient_descent(X, y, *, learning_rate=0.01, epochs=100):
+def batch_gradient_descent(X, y, *, learning_rate=0.04, epochs=100):
     return minibatch_gradient_descent(
         X, y, learning_rate=learning_rate, epochs=epochs, batch_size=len(y)
     )
 
 
-def stochastic_gradient_descent(X, y, *, learning_rate=0.0025, epochs=400):
+def stochastic_gradient_descent(X, y, *, learning_rate=0.01, epochs=400):
     return minibatch_gradient_descent(
         X, y, learning_rate=learning_rate, epochs=epochs, batch_size=1
     )
+
+
+def minibatch_rmsprop(
+    X, y, *, learning_rate=0.02, epochs=100, batch_size=64, beta=0.9, epsilon=1e-8
+):
+    theta = np.zeros(X.shape[1])
+    S = np.zeros(X.shape[1])
+    for _ in range(epochs):
+        gradient = minibatch_get_gradient(X, y, batch_size, theta)
+        S = beta * S + (1 - beta) * gradient**2
+        alpha = learning_rate / (np.sqrt(S) + epsilon)
+        theta -= alpha * gradient
+    return theta
+
+
+OPTIMIZERS = {
+    "batch": batch_gradient_descent,
+    "minibatch": minibatch_gradient_descent,
+    "rmsprop": minibatch_rmsprop,
+    "sgd": stochastic_gradient_descent,
+}
 
 
 def train_ovr(optimizer, X, y, num_labels):
@@ -75,10 +97,7 @@ def main():
         flags=["--debug"],
         optimizer=True,
     )
-    optimizer = {
-        "stochastic": stochastic_gradient_descent,
-        "minibatch": minibatch_gradient_descent,
-    }.get(args.optimizer, batch_gradient_descent)
+    optimizer = OPTIMIZERS.get(args.optimizer, batch_gradient_descent)
     X, y, houses, means, stds = process_data(data)
     if args.debug:
         accuracies = []

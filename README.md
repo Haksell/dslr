@@ -28,7 +28,7 @@
 
 -   [x] Stochastic Gradient Descent
 -   [x] Mini-batch Gradient Descent
+-   [x] RMSProp
+-   [ ] Gradient Descent With Momentum
 -   [ ] Adam
--   [ ] Newton-Raphson Method
--   [ ] LBFGS
 -   [ ] SAGA

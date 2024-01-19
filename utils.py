@@ -2,6 +2,8 @@ import argparse
 import pandas as pd
 import sys
 
+OPTIMIZER_CHOICES = ["batch", "minibatch", "rmsprop", "sgd"]
+OPTIMIZER_DEFAULT = "batch"
 HOUSE_COLORS = {
     "Gryffindor": "#D62728",
     "Hufflepuff": "#ECB939",
@@ -17,8 +19,8 @@ def parse_args(description, *, additional_arguments=None, flags=None, optimizer=
         parser.add_argument(
             "--optimizer",
             type=str,
-            choices=["batch", "minibatch", "stochastic"],
-            default="batch",
+            choices=OPTIMIZER_CHOICES,
+            default=OPTIMIZER_DEFAULT,
             help="Type of optimizer to use.",
         )
     if additional_arguments:
